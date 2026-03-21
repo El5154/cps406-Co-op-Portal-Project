@@ -8,6 +8,9 @@
     "start": "node server.js",
     "test": "NODE_ENV=test jest --runInBand"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
