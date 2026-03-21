@@ -7,7 +7,7 @@ router.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    return res.status(400).send("Username and password are required");
+    return res.status(400).json({ error: "Username and password are required" });
   }
 
   const user = db.prepare(
@@ -15,7 +15,7 @@ router.post("/login", (req, res) => {
   ).get(username, password);
 
   if (!user) {
-    return res.status(401).send("Invalid credentials");
+    return res.status(401).json({ error: "Invalid credentials" });
   }
 
   const sessionUser = {
@@ -35,15 +35,22 @@ router.post("/login", (req, res) => {
   }
 
   req.session.user = sessionUser;
-  return res.status(200).json({
-    message: "Login successful",
-    role: user.role
+
+  req.session.save((err) => {
+    if (err) {
+      return res.status(500).json({ error: "Failed to save session" });
+    }
+
+    return res.status(200).json({
+      message: "Login successful",
+      role: user.role
+    });
   });
 });
 
 router.post("/logout", (req, res) => {
   req.session.destroy(() => {
-    res.status(200).send("Logged out");
+    res.status(200).json({ message: "Logged out" });
   });
 });
 

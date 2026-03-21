@@ -2,112 +2,119 @@ const request = require("supertest");
 const app = require("../app");
 const db = require("../config/applicants");
 
-beforeEach(() => {
-  db.prepare("DELETE FROM applicants").run();
-  db.prepare("DELETE FROM users").run();
-});
+describe("Login and security check", () => {
+  beforeEach(() => {
+    db.prepare("DELETE FROM users").run();
+    db.prepare("DELETE FROM applicants").run();
 
-describe("POST /register", () => {
-  test("valid applicant", async () => {
-    const res = await request(app)
-      .post("/register")
-      .send({
-        name: "student",
-        studentID: "123456789",
-        email: "student@torontomu.ca"
-      });
+    db.prepare(`
+      INSERT INTO users (username, password, role)
+      VALUES (?, ?, ?)
+    `).run("coordinator", "password", "coordinator");
 
-    expect(res.statusCode).toBe(201);
+    db.prepare(`
+      INSERT INTO applicants (name, studentID, email)
+      VALUES (?, ?, ?)
+    `).run("Alice", "123456789", "alice@torontomu.ca");
+
+    db.prepare(`
+      INSERT INTO users (username, password, role)
+      VALUES (?, ?, ?)
+    `).run("123456789", "password", "applicant");
   });
 
-  test("missing field", async () => {
+  test("login_valid_user_coordinator", async () => {
     const res = await request(app)
-      .post("/register")
+      .post("/login")
       .send({
-        name: "student",
-        studentID: "123456789"
+        username: "coordinator",
+        password: "password"
       });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("Login successful");
+    expect(res.body.role).toBe("coordinator");
+  });
+
+  test("login_valid_user_applicant", async () => {
+    const res = await request(app)
+      .post("/login")
+      .send({
+        username: "123456789",
+        password: "password"
+      });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("Login successful");
+    expect(res.body.role).toBe("applicant");
+  });
+
+  test("login_incorrect_password", async () => {
+    const res = await request(app)
+      .post("/login")
+      .send({
+        username: "coordinator",
+        password: "wrongpassword"
+      });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.error).toBe("Invalid credentials");
+  });
+
+  test("login_incorrect_email", async () => {
+    const res = await request(app)
+      .post("/login")
+      .send({
+        username: "wronguser",
+        password: "password"
+      });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.error).toBe("Invalid credentials");
+  });
+
+  test("login_is_empty", async () => {
+    const res = await request(app)
+      .post("/login")
+      .send({});
 
     expect(res.statusCode).toBe(400);
+    expect(res.body.error).toBe("Username and password are required");
   });
 
-  test("invalid student ID < 9 digits", async () => {
+  test("login_nonexistent_user", async () => {
     const res = await request(app)
-      .post("/register")
+      .post("/login")
       .send({
-        name: "student",
-        studentID: "12345678",
-        email: "student@torontomu.ca"
+        username: "notreal",
+        password: "password"
       });
 
-    expect(res.statusCode).toBe(400);
+    expect(res.statusCode).toBe(401);
+    expect(res.body.error).toBe("Invalid credentials");
   });
 
-  test("invalid student ID > 9 digits", async () => {
-    const res = await request(app)
-      .post("/register")
-      .send({
-        name: "student",
-        studentID: "1234567890",
-        email: "student@torontomu.ca"
-      });
+  test("logout destroys session and blocks protected route", async () => {
+    const agent = request.agent(app);
 
-    expect(res.statusCode).toBe(400);
-  });
-
-  test("invalid student ID contains letters", async () => {
-    const res = await request(app)
-      .post("/register")
-      .send({
-        name: "student",
-        studentID: "123A5B89C",
-        email: "student@torontomu.ca"
-      });
-
-    expect(res.statusCode).toBe(400);
-  });
-
-  test("invalid email", async () => {
-    const res = await request(app)
-      .post("/register")
-      .send({
-        name: "student",
-        studentID: "123456789",
-        email: "test@gmail.com"
-      });
-
-    expect(res.statusCode).toBe(400);
-  });
-
-  test("duplicate applicant ID", async () => {
-    await request(app).post("/register").send({
-      name: "student1",
-      studentID: "123456789",
-      email: "student1@torontomu.ca"
+    const loginRes = await agent.post("/login").send({
+      username: "coordinator",
+      password: "password"
     });
+    expect(loginRes.statusCode).toBe(200);
 
-    const res = await request(app).post("/register").send({
-      name: "student2",
-      studentID: "123456789",
-      email: "student2@torontomu.ca"
-    });
+    const beforeLogout = await agent.get("/dashboard");
+    expect(beforeLogout.statusCode).toBe(200);
 
-    expect(res.statusCode).toBe(400);
+    const logoutRes = await agent.post("/logout");
+    expect(logoutRes.statusCode).toBe(200);
+
+    const afterLogout = await agent.get("/dashboard");
+    expect(afterLogout.statusCode).toBe(401);
   });
 
-  test("duplicate applicant email", async () => {
-    await request(app).post("/register").send({
-      name: "student1",
-      studentID: "123456780",
-      email: "student@torontomu.ca"
-    });
-
-    const res = await request(app).post("/register").send({
-      name: "student2",
-      studentID: "123456789",
-      email: "student@torontomu.ca"
-    });
-
-    expect(res.statusCode).toBe(400);
+  test("unauthenticated user blocked from protected route", async () => {
+    const res = await request(app).get("/dashboard");
+    expect(res.statusCode).toBe(401);
   });
 });
