@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors({
   origin: [
     "http://localhost:5500",
-    "https://el5154.github.io/cps420-Co-op-Portal-Project/"
+    "https://el5154.github.io"
   ],
   credentials: true
 }));
