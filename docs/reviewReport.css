@@ -103,19 +103,42 @@ a:hover {
   word-break: break-word;
 }
 
+#deadline {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  outline: none;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#deadline:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+}
+
 #setDeadline {
-    display: block;
-    margin: 25px auto 0 auto;
-    padding: 12px 24px;
-    font-size: 16px;
-    font-weight: bold;
-    background-color: #1f3c88;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-  }
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#setDeadline:hover {
+  background: #357abd;
+}
+
+#setDeadline:active {
+  transform: scale(0.98);
+}
 
 @media (max-width: 768px) {
   body {
