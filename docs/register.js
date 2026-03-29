@@ -10,6 +10,7 @@ form.addEventListener("submit", async (e) => {
   const name = document.getElementById("name").value.trim();
   const studentID = document.getElementById("studentID").value.trim();
   const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
 
   if (!name || !studentID || !email) {
     message.textContent = "All fields are required.";
@@ -29,13 +30,25 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
+  if (password.length < 6) {
+    message.textContent = "Password must be at least 6 characters long.";
+    message.classList.add("error");
+    return;
+  }
+
   try {
     const response = await fetch(`${BASE_URL}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ name, studentID, email })
+      credentials: "include",
+      body: JSON.stringify({
+        name,
+        studentID,
+        email,
+        password
+      })
     });
 
     const data = await response.json();

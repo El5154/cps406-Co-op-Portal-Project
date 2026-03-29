@@ -5,9 +5,9 @@ const db = require("../config/applicants");
 
 // POST /register - Register a new applicant
 router.post("/register", (req, res) => {
-  const { name, studentID, email } = req.body;
+  const { name, studentID, email, password } = req.body;
 
-  if (!name || !studentID || !email) {
+  if (!name || !studentID || !email || !password) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
@@ -19,13 +19,27 @@ router.post("/register", (req, res) => {
     return res.status(400).json({ error: "Email must end with @torontomu.ca" });
   }
 
+  if (password.length < 6) {
+    return res.status(400).json({ error: "Password must be at least 6 characters long" });
+  }
+
   try {
-    const stmt = db.prepare(`
+    const insertApplicant = db.prepare(`
       INSERT INTO applicants (name, studentID, email)
       VALUES (?, ?, ?)
     `);
 
-    stmt.run(name, studentID, email);
+    const insertUser = db.prepare(`
+      INSERT INTO users (username, password, role)
+      VALUES (?, ?, ?)
+    `);
+
+    const transaction = db.transaction(() => {
+      insertApplicant.run(name, studentID, email);
+      insertUser.run(studentID, password, "applicant");
+    });
+
+    transaction();
 
     return res.status(201).json({
       message: "Applicant registered successfully"

@@ -34,8 +34,26 @@ router.post("/uploadReport", requireAuth, (req, res) => {
   if (!req.session.user.studentID) {
     return res.status(400).json({ error: "Applicant student ID missing from session" });
   }
+  const studentID = req.session.user.studentID;
+
+  const applicant = db.prepare(`
+    SELECT final_status
+    FROM applicants
+    WHERE studentID = ?
+  `).get(studentID);
+
+  if (!applicant) {
+    return res.status(404).json({ error: "Applicant not found" });
+  }
+
+  if (applicant.final_status !== "Accepted") {
+    return res.status(403).json({
+      error: "You cannot upload a report until your final status is Accepted"
+    });
+  }
 
   upload(req, res, (err) => {
+
     if (err) {
       return res.status(400).json({ error: err.message });
     }
