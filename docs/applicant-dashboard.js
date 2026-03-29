@@ -3,8 +3,9 @@ const studentIDSpan = document.getElementById("studentID");
 const provisionalStatusSpan = document.getElementById("provisionalStatus");
 const finalStatusSpan = document.getElementById("finalStatus");
 const message = document.getElementById("message");
-const uploadReportBtn = document.getElementById("uploadBtn");
-const reportFileInput = document.getElementById("reportFile");
+const uploadBtn = document.getElementById("uploadBtn");
+const reportFile = document.getElementById("reportFile");
+const uploadMessage = document.getElementById("uploadMessage");
 const logoutBtn = document.getElementById("logoutBtn");
 const reportsTableBody = document.getElementById("reportsTableBody");
 
@@ -26,6 +27,18 @@ function formatDateTime(value) {
     hour: "2-digit",
     minute: "2-digit"
   });
+}
+
+function disableUpload(message) {
+  uploadBtn.disabled = true;
+  reportFile.disabled = true;
+  uploadMessage.textContent = message;
+}
+
+function enableUpload() {
+  uploadBtn.disabled = false;
+  reportFile.disabled = false;
+  uploadMessage.textContent = "";
 }
 
 async function loadDashboard() {
@@ -78,16 +91,46 @@ async function loadDashboard() {
         `;
       }
 
+      const rawDeadline = data.deadline;
+      const finalStatus = data.final_status;
+
+      if (!rawDeadline) {
+        disableUpload("Upload is unavailable because no deadline has been set.");
+        return;
+      }
+
+      const deadlineDate = new Date(rawDeadline);
+      const now = new Date();
+
+      if (isNaN(deadlineDate.getTime())) {
+        disableUpload("Upload is unavailable because the deadline is invalid.");
+        return;
+      }
+
+      if (finalStatus !== "Accepted") {
+        disableUpload("Upload is only available for accepted applicants.");
+        return;
+      }
+
+      if (now > deadlineDate) {
+        disableUpload("Upload closed. The deadline has passed.");
+        return;
+      }
+
+      enableUpload();
+
     } else {
+      disableUpload("Could not verify upload eligibility.");
       showMessage(data.error || "Failed to load dashboard.", "error");
     }
   } catch (error) {
+    disableUpload("Could not verify upload eligibility.");
     showMessage("Could not connect to the server.", "error");
   }
 }
 
-uploadReportBtn.addEventListener("click", async () => {
-  const file = reportFileInput.files[0];
+uploadBtn.addEventListener("click", async () => {
+  const file = reportFile.files[0];
 
   if (!file) {
     showMessage("No file selected.", "error");
@@ -113,7 +156,7 @@ uploadReportBtn.addEventListener("click", async () => {
 
     if (response.ok) {
       showMessage(data.message || "Report uploaded successfully.", "success");
-      reportFileInput.value = "";
+      reportFile.value = "";
       loadDashboard();
     } else {
       showMessage(data.error || "Failed to upload report.", "error");

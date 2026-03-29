@@ -91,6 +91,11 @@ button:hover {
   background: #162d66;
 }
 
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 #logoutBtn {
   display: block;
   margin: 20px auto 0;
