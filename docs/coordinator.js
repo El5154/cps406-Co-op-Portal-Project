@@ -78,20 +78,6 @@ function renderApplicants(applicants) {
           <button onclick="window.location.href = 'reviewReport.html?applicantId=${applicant.id}'" ${!submissionDone ? "disabled" : ""}>
             Review Reports
           </button>
-
-          <input
-            type="password"
-            id="password-${applicant.id}"
-            placeholder="New account password"
-            ${applicant.final_status === "Accepted" ? "" : "disabled"}
-          />
-
-          <button
-            onclick="createAccount(${applicant.id})"
-            ${applicant.final_status === "Accepted" ? "" : "disabled"}
-          >
-            Create Account
-          </button>
         </div>
       </td>
     `;
