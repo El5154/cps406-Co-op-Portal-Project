@@ -53,7 +53,7 @@ function renderStudents(students) {
             <td>${student.evaluationStatus}</td>
             <td>
                 <div class="action">
-                    <button onclick="window.location.href = '/supervisor/student/${student.studentID}'" class="btn">View Details</button>
+                    <button onclick="window.location.href = 'evaluation.html?studentID=${student.studentID}'" class="btn">View Details</button>
                 </div>
             </td>
         `

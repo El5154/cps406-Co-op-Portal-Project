@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluation</title>
+  <link rel="stylesheet" href="evaluation.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="header">
+      <h1>Evaluation</h1>
+      <button id="logoutBtn">Logout</button>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <section>
+      <h2>Profile</h2>
+      <p><strong>Name:</strong> <span id="studentName">-</span></p>
+      <p><strong>Student ID:</strong> <span id="studentID">-</span></p>
+      <p><strong>Student Email:</strong> <span id="studentEmail">-</span></p>
+      <p><strong>Evaluation Status:</strong> <span id="evaluationStatus">-</span></p>
+    </section>
+
+    <section>
+      <h2>Evaluation Details</h2>
+      <p><strong>Supervisor Name:</strong> <span id="supervisorName">-</span></p>
+      <p><strong>Supervisor Email:</strong> <span id="supervisorEmail">-</span></p>
+    </section>
+
+    <section>
+      <h2>Performance Rating</h2>
+      <select id="overallPerformance">
+        <option value="">Select</option>
+        <option value="Excellent">Excellent</option>
+        <option value="Good">Good</option>
+        <option value="Satisfactory">Satisfactory</option>
+        <option value="Needs Improvement">Needs Improvement</option>
+      </select>
+      <button id="submitBtn">Submit Evaluation</button>
+      <p id="submitMessage" class="upload-message"></p>
+    </section>
+
+    <section>
+      <h2>Submit Evaluation File</h2>
+      <input type="file" id="evaluationFile">
+      <button id="uploadBtn">Submit Evaluation</button>
+      <p id="uploadMessage" class="upload-message"></p>
+    </section>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="logout.js"></script>
+  <script src="evaluation.js"></script>
+</body>
+</html>

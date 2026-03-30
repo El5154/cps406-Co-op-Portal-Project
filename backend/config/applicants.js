@@ -30,7 +30,8 @@ db.exec(`
     report_uploaded INTEGER DEFAULT 0,
     report_uploaded_at TEXT,
     evaluation_filename TEXT,
-    evaluation_path TEXT
+    evaluation_path TEXT,
+    evaluation_type TEXT
   );
 
   CREATE TABLE IF NOT EXISTS users (

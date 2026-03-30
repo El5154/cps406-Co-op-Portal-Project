@@ -21,3 +21,5 @@ router.get(`/supervisor/students`, requireAuth, (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching students.' });
     }
 });
+
+module.exports = router;
