@@ -63,6 +63,7 @@ function renderEvaluation(evaluation) {
 
 submitBtn.addEventListener("click", async () => {
   const performance = performanceSpan.value;
+  const studentID = studentIdSpan.textContent;
 
   if (!performance) {
     showMessage("Please select an overall performance rating before uploading.", "error");
@@ -71,12 +72,12 @@ submitBtn.addEventListener("click", async () => {
 
   try {
     const response = await fetch(`${BASE_URL}/uploadEvaluation`, {
-      method: "POST",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json"
       },
       credentials: "include",
-      body: JSON.stringify({ overallPerformance: performance })
+      body: JSON.stringify({ studentID: studentID, overallPerformance: performance })
     });
 
     const data = await response.json();
@@ -111,8 +112,8 @@ uploadBtn.addEventListener("click", async () => {
     formData.append("evaluationFile", file);
 
     try {
-        const reponse = await fetch(`${BASE_URL}/uploadEvaluationFile`, {
-            method: "POST",
+        const reponse = await fetch(`${BASE_URL}/uploadEvaluationFile/${studentId}`, {
+            method: "PATCH",
             credentials: "include",
             body: formData
         });

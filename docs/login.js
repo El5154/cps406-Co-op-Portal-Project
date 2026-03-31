@@ -36,6 +36,8 @@ form.addEventListener("submit", async (e) => {
         window.location.href = "coordinator.html";
       } else if (data.role === "applicant") {
         window.location.href = "applicant-dashboard.html";
+      } else if (data.role === "supervisor") {
+        window.location.href = "supervisor.html";
       }
     } else {
       message.textContent = data.error || "Login failed.";
@@ -45,4 +47,8 @@ form.addEventListener("submit", async (e) => {
     message.textContent = "Could not connect to the server.";
     message.classList.add("error");
   }
+});
+
+backBtn.addEventListener("click", async () => {
+    window.location.href = "index.html";
 });

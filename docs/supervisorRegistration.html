@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Supervisor Registration</title>
+        <link rel="stylesheet" href="supervisorRegistration.css">
+    </head>
+    <body>
+        <div class="registrationForm">
+            <div class = "header">
+                <h1>Supervisor Registration</h1>
+                <button id="backBtn">Back</button>
+            </div>
+
+            <div id="message" class="message"></div>
+
+            <form id="registrationPage">
+                <label for="Username">Username</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit" id="submit">Register</button>
+            </form>
+        </div>
+
+        <script src="config.js"></script>
+        <script src="supervisorRegistration.js"></script>
+    </body>
+</html>

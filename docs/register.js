@@ -66,3 +66,7 @@ form.addEventListener("submit", async (e) => {
     message.classList.add("error");
   }
 });
+
+backBtn.addEventListener("click", async () => {
+    window.location.href = "index.html";
+});

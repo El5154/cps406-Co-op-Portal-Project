@@ -8,6 +8,7 @@ const reportFile = document.getElementById("reportFile");
 const uploadMessage = document.getElementById("uploadMessage");
 const logoutBtn = document.getElementById("logoutBtn");
 const reportsTableBody = document.getElementById("reportsTableBody");
+const templateLink = document.getElementById("templateLink");
 
 function showMessage(text, type) {
   message.textContent = text;
