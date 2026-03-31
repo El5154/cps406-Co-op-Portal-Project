@@ -1,19 +1,25 @@
 const form = document.getElementById("loginForm");
 const message = document.getElementById("message");
 
+function showMessage(text, type) {
+  message.textContent = text;
+  message.className = "message";
+  
+  if (type) {
+    message.classList.add(type);
+  }
+}
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  message.textContent = "";
-  message.className = "message";
+  showMessage("", "");
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
 
   if (!username || !password) {
-    message.textContent = "Username and password are required.";
-    message.classList.add("error");
-    return;
+    return showMessage("Username and password are required.", "error");
   }
 
   try {
@@ -29,8 +35,7 @@ form.addEventListener("submit", async (e) => {
     const data = await response.json();
 
     if (response.ok) {
-      message.textContent = data.message || "Login successful.";
-      message.classList.add("success");
+      showMessage(data.message || "Login successful.", "success");
 
       if (data.role === "coordinator") {
         window.location.href = "coordinator.html";
@@ -40,12 +45,11 @@ form.addEventListener("submit", async (e) => {
         window.location.href = "supervisor.html";
       }
     } else {
-      message.textContent = data.error || "Login failed.";
-      message.classList.add("error");
+      showMessage(data.error || "Login failed.", "error");
+
     }
   } catch (error) {
-    message.textContent = "Could not connect to the server.";
-    message.classList.add("error");
+    showMessage("Could not connect to the server.", "error");
   }
 });
 

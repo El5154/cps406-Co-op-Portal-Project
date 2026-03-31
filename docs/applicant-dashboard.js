@@ -13,7 +13,10 @@ const templateLink = document.getElementById("templateLink");
 function showMessage(text, type) {
   message.textContent = text;
   message.className = "message";
-  if (type) message.classList.add(type);
+  
+  if (type) {
+    message.classList.add(type);
+  }
 }
 
 function formatDateTime(value) {

@@ -1,3 +1,12 @@
+function showMessage(text, type) {
+  message.textContent = text;
+  message.className = "message";
+  
+  if (type) {
+    message.classList.add(type);
+  }
+}
+
 async function handleLogout() {
   const message = document.getElementById("message");
 
@@ -10,13 +19,11 @@ async function handleLogout() {
     if (response.ok) {
       window.location.href = "login.html";
     } else if (message) {
-      message.textContent = "Logout failed.";
-      message.className = "message error";
+      showMessage("Logout failed", "error");
     }
   } catch (error) {
     if (message) {
-      message.textContent = "Could not connect to the server.";
-      message.className = "message error";
+      showMessage("Could not connect to the server.", "error");
     }
   }
 }

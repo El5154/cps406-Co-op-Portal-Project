@@ -1,11 +1,19 @@
 const form = document.getElementById("registerForm");
 const message = document.getElementById("message");
 
+function showMessage(text, type) {
+  message.textContent = text;
+  message.className = "message";
+  
+  if (type) {
+    message.classList.add(type);
+  }
+}
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  message.textContent = "";
-  message.className = "message";
+  showMessage("", "");
 
   const name = document.getElementById("name").value.trim();
   const studentID = document.getElementById("studentID").value.trim();
@@ -13,27 +21,19 @@ form.addEventListener("submit", async (e) => {
   const password = document.getElementById("password").value;
 
   if (!name || !studentID || !email) {
-    message.textContent = "All fields are required.";
-    message.classList.add("error");
-    return;
+    return showMessage("All fields are required.", "error");
   }
 
   if (!/^\d{9}$/.test(studentID)) {
-    message.textContent = "Student ID must be exactly 9 digits.";
-    message.classList.add("error");
-    return;
+    return showMessage("Student ID must be exactly 9 digits.", "error");
   }
 
   if (!email.endsWith("@torontomu.ca")) {
-    message.textContent = "Email must end with @torontomu.ca.";
-    message.classList.add("error");
-    return;
+    return showMessage("Email must end with @torontomu.ca.", "error");
   }
 
   if (password.length < 6) {
-    message.textContent = "Password must be at least 6 characters long.";
-    message.classList.add("error");
-    return;
+    return showMessage("Password must be at least 6 characters long.", "error");
   }
 
   try {
@@ -54,16 +54,13 @@ form.addEventListener("submit", async (e) => {
     const data = await response.json();
 
     if (response.ok) {
-      message.textContent = data.message || "Registration successful.";
-      message.classList.add("success");
+      showMessage(data.message || "Registration successful.", "success");
       form.reset();
     } else {
-      message.textContent = data.error || "Registration failed.";
-      message.classList.add("error");
+      showMessage(data.error || "Registration failed.", "error")
     }
   } catch (error) {
-    message.textContent = "Could not connect to the server.";
-    message.classList.add("error");
+    showMessage("Could not connect to the server.", "error");
   }
 });
 

@@ -46,10 +46,25 @@ p {
 
 .message,
 .upload-message {
-  text-align: center;
-  margin-bottom: 18px;
+  display: none;
+  padding: 12px 15px;
+  border-radius: 8px;
   font-weight: bold;
-  color: #dc2626;
+  margin-bottom: 20px;
+}
+
+.message.success {
+  display: block;
+  background: #e6f9ec;
+  color: #1b5e20;
+  border: 1px solid #a5d6a7;
+}
+
+.message.error {
+  display: block;
+  background: #fdecea;
+  color: #b71c1c;
+  border: 1px solid #ef9a9a;
 }
 
 table {
