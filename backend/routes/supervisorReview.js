@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require(`../config/applicants`);
-const requireAuth = require(`../middleware/requireAuth`);
+const requireAuth = require(`../middleware/requireSupervisor`);
 
 router.get(`/supervisor/students`, requireAuth, (req, res) => {
-    const supervisorId = req.user.id;
+    const supervisorId = req.session.user.id;
     const query = `
         SELECT a.studentID, a.name, a.email, r.evaluation_status
         FROM applicants a
@@ -23,8 +23,16 @@ router.get(`/supervisor/students`, requireAuth, (req, res) => {
 });
 
 router.patch(`/uploadEvaluation`, requireAuth, (req, res) => {
-    const supervisorId = req.user.id;
+    const supervisorId = req.session.user.id;
     const { studentId, overallPerformance } = req.body;
+
+    if (!studentId) {
+        return res.status(400).json({ error: "studentId is required" });
+    }
+
+    if (!overallPerformance) {
+        return res.status(400).json({ error: "overallPerformance is required" });
+    }
 
     const updateQuery = `
         UPDATE reports
@@ -36,10 +44,10 @@ router.patch(`/uploadEvaluation`, requireAuth, (req, res) => {
         const result = db.prepare(updateQuery).run(overallPerformance, studentId);
 
         if (result.changes === 0) {
-            return res.status(404).json({ error: `No report found for student ID ${studentId}`});
+            return res.status(404).json({ error: `No report found for student ID ${studentId}` });
         }
 
-        res.json({ message: `Evaluation for student ID: ${studentId} updated successfully.`});
+        res.json({ message: `Evaluation for student ID: ${studentId} updated successfully.` });
     } catch (error) {
         return res.status(500).json({ error: `Could not update evaluation for student ID ${studentId}.` });
     }

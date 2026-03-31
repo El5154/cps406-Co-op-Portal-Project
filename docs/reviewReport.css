@@ -1,189 +1,129 @@
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f4f6f8;
-  color: #222;
-  padding: 40px 20px;
-  line-height: 1.6;
+  background: #f4f7fb;
+  color: #1f2937;
 }
 
 .page-container {
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
+  margin-top: 0;
   text-align: center;
-  margin-bottom: 30px;
-  color: #1f3c88;
-}
-
-section {
-  background-color: #ffffff;
-  margin: 0 auto 20px auto;
-  padding: 25px 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  color: #1d4ed8;
+  margin-bottom: 20px;
 }
 
 h2 {
-  margin-bottom: 15px;
-  color: #333;
-  border-bottom: 2px solid #e6eaf0;
-  padding-bottom: 8px;
+  margin-top: 0;
+  color: #2563eb;
+  font-size: 1.15rem;
 }
 
-p {
-  margin-bottom: 12px;
-  font-size: 16px;
-}
-
-strong {
-  color: #111;
-}
-
-a {
-  color: #1f6feb;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-a:hover {
-  text-decoration: underline;
+section {
+  background: #f9fbff;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 22px;
 }
 
 .message {
-  margin: 0 auto 20px auto;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-weight: bold;
   text-align: center;
-  display: none;
-}
-
-.message.success {
-  display: block;
-  background-color: #d1f7dc;
-  color: #146c2e;
-  border: 1px solid #9fe0b0;
-}
-
-.message.error {
-  display: block;
-  background-color: #fde2e2;
-  color: #b42318;
-  border: 1px solid #f5b5b5;
+  margin-bottom: 18px;
+  font-weight: bold;
+  color: #dc2626;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 12px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-thead tr {
-  border-bottom: 2px solid #333;
+thead {
+  background: #2563eb;
+  color: white;
 }
 
-th {
-  padding: 8px;
-  text-align: left;
-}
-
+th,
 td {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
+  padding: 14px;
+  border: 1px solid #dbeafe;
+  text-align: center;
 }
 
 .table-empty {
-  text-align: center;
-  padding: 10px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+input[type="date"] {
+  width: 100%;
+  max-width: 280px;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: bold;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
 }
 
 #backBtn {
   display: block;
-  margin: 25px auto 0 auto;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #1f3c88;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin: 0 auto;
+  background: #6b7280;
 }
 
 #backBtn:hover {
-  background-color: #162d66;
-}
-
-#backBtn:active {
-  transform: scale(0.98);
-}
-
-#deadline {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 1rem;
-  border: 1px solid #bbb;
-  border-radius: 8px;
-  outline: none;
-  margin-bottom: 12px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-#deadline:focus {
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
-}
-
-#setDeadline {
-  background: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
-
-#setDeadline:hover {
-  background: #357abd;
-}
-
-#setDeadline:active {
-  transform: scale(0.98);
+  background: #4b5563;
 }
 
 @media (max-width: 768px) {
-  body {
-    padding: 25px 15px;
-  }
-
-  section {
+  .page-container {
+    margin: 20px;
     padding: 20px;
   }
 
-  h1 {
-    font-size: 28px;
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
 
-  h2 {
-    font-size: 20px;
-  }
-
-  p {
-    font-size: 15px;
-  }
-
-  #backBtn {
+  input[type="date"],
+  button {
     width: 100%;
+    max-width: none;
   }
 }
