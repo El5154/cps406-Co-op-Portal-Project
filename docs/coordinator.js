@@ -1,6 +1,8 @@
 const tableBody = document.getElementById("applicantTableBody");
 const message = document.getElementById("message");
 const logoutBtn = document.getElementById("logoutBtn");
+const showAllBtn = document.getElementById("showAllBtn");
+const showLateBtn = document.getElementById("showLateBtn");
 
 function showMessage(text, type) {
   message.textContent = text;
@@ -191,6 +193,22 @@ logoutBtn.addEventListener("click", async () => {
   } catch (error) {
     showMessage("Could not connect to the server.", "error");
   }
+});
+
+function setActiveButton(activeBtn) {
+  showAllBtn.classList.remove("active");
+  showLateBtn.classList.remove("active");
+  activeBtn.classList.add("active");
+}
+
+showAllBtn.addEventListener("click", () => {
+  setActiveButton(showAllBtn);
+  loadApplicants(`${BASE_URL}/applicants`);
+});
+
+showLateBtn.addEventListener("click", () => {
+  setActiveButton(showLateBtn);
+  loadApplicants(`${BASE_URL}/applicants/missed-deadlines`);
 });
 
 loadApplicants();

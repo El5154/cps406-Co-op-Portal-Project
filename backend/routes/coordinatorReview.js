@@ -130,4 +130,17 @@ router.post("/back", requireCoordinator, (req, res) => {
   return res.status(200).json({ message: "Back to coordinator dashboard" });
 });
 
+router.get("/applicants/missed-deadline", requireCoordinator, (req, res) => {
+  const today = new Date().toISOString().split("T")[0];
+
+  const missedApplicants = db.prepare(`
+    SELECT a.id, a.name, a.studentID, a.email, a.provisional_status, a.final_status, r.report_status, r.deadline
+    FROM applicants a
+    JOIN reports r ON a.studentID = r.studentID
+    WHERE r.deadline < ? AND r.report_uploaded = 0
+  `).all(today);
+
+  return res.status(200).json(missedApplicants);
+});
+
 module.exports = router;

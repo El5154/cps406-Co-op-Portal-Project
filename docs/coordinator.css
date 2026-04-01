@@ -146,6 +146,30 @@ select:disabled {
   background: #b91c1c;
 }
 
+.view-switch {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.view-switch button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #e5e7eb;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.view-switch button.active {
+  background: #2563eb;
+  color: white;
+}
+
+.view-switch button:hover {
+  opacity: 0.9;
+}
+
 @media (max-width: 1000px) {
   .container {
     margin: 20px;
