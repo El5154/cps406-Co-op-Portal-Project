@@ -1,11 +1,9 @@
-// routes/coordinatorReview.js
 const express = require("express");
 const router = express.Router();
 const db = require("../config/applicants");
-
 const requireCoordinator = require("../middleware/requireCoordinator");
 
-// Gets applicants list information for coordinator dashboard
+// Get all applicants for coordinator dashboard
 router.get("/applicants", requireCoordinator, (req, res) => {
   const applicants = db.prepare(`
     SELECT
@@ -45,9 +43,10 @@ router.patch("/applicants/:id/status", requireCoordinator, (req, res) => {
     return res.status(400).json({ error: "Invalid status value" });
   }
 
-  const applicant = db.prepare(
-    "SELECT * FROM applicants WHERE id = ?"
-  ).get(id);
+  const applicant = db.prepare(`
+    SELECT * FROM applicants 
+    WHERE id = ?
+  `).get(id);
 
   if (!applicant) {
     return res.status(404).json({ error: "Applicant not found" });
@@ -59,9 +58,11 @@ router.patch("/applicants/:id/status", requireCoordinator, (req, res) => {
     });
   }
 
-  db.prepare(
-    "UPDATE applicants SET provisional_status = ? WHERE id = ?"
-  ).run(provisional_status, id);
+  db.prepare(`
+    UPDATE applicants 
+    SET provisional_status = ? 
+    WHERE id = ?
+  `).run(provisional_status, id);
 
   return res.status(200).json({
     message: "Applicant provisional status updated successfully"
@@ -72,9 +73,10 @@ router.patch("/applicants/:id/status", requireCoordinator, (req, res) => {
 router.patch("/applicants/:id/finalize", requireCoordinator, (req, res) => {
   const { id } = req.params;
 
-  const applicant = db.prepare(
-    "SELECT * FROM applicants WHERE id = ?"
-  ).get(id);
+  const applicant = db.prepare(`
+    SELECT * FROM applicants 
+    WHERE id = ?
+  `).get(id);
 
   if (!applicant) {
     return res.status(404).json({ error: "Applicant not found" });
@@ -92,9 +94,10 @@ router.patch("/applicants/:id/finalize", requireCoordinator, (req, res) => {
     });
   }
 
-  db.prepare(
-    "UPDATE applicants SET final_status = ? WHERE id = ?"
-  ).run(applicant.provisional_status, id);
+  db.prepare(`
+    UPDATE applicants 
+    SET final_status = ? WHERE id = ?
+  `).run(applicant.provisional_status, id);
 
   return res.status(200).json({
     message: "Applicant final status updated successfully"
@@ -110,11 +113,12 @@ router.patch("/applicants/:id/supervisor", requireCoordinator, (req, res) => {
     return res.status(400).json({ error: "Supervisor name is required" });
   }
 
-  const applicant = db.prepare(`
-    SELECT * FROM users WHERE username = ?
+  const supervisorUser = db.prepare(`
+    SELECT * FROM users 
+    WHERE username = ?
   `).get(supervisor);
 
-  if (!applicant) {
+  if (!supervisorUser) {
     return res.status(400).json({ error: "Supervisor not found"});
   }
 
@@ -124,11 +128,6 @@ router.patch("/applicants/:id/supervisor", requireCoordinator, (req, res) => {
   `).run(supervisor, id);
 
   return res.status(200).json({ message: "Supervisor assigned successfully"});
-});
-
-// Back button route after report review
-router.post("/back", requireCoordinator, (req, res) => {
-  return res.status(200).json({ message: "Back to coordinator dashboard" });
 });
 
 // Gets applicants who missed report submission deadlines

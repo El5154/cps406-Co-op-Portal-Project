@@ -77,9 +77,14 @@ const upload = multer({
 
     cb(null, true);
   }
-});
+}).single("evaluationFile");
 
-router.patch("/uploadEvaluationFile/:studentID", requireAuth, upload.single("evaluationFile"), (req, res) => {
+router.patch("/uploadEvaluationFile/:studentID", requireAuth, (req, res) => {
+  upload(req, res, (error) => {
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
     try {
       const { studentID } = req.params;
 
@@ -136,19 +141,16 @@ router.patch("/uploadEvaluationFile/:studentID", requireAuth, upload.single("eva
         studentID
       );
 
-      return res.status(200).json({ message: "Evaluation file uploaded successfully." });
+      return res.status(200).json({
+        message: "Evaluation file uploaded successfully."
+      });
     } catch (error) {
       console.error(error);
-
-      if (error.message === "Only PDF files are allowed.") {
-        return res.status(400).json({ error: error.message });
-      }
-
       return res.status(500).json({
         error: "An error occurred while uploading the evaluation file."
       });
     }
-  }
-);
+  });
+});
 
 module.exports = router;

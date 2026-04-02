@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/applicants");
 
+// Login
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
 
@@ -10,9 +11,10 @@ router.post("/login", (req, res) => {
     return res.status(400).json({ error: "Username and password are required" });
   }
 
-  const user = db.prepare(
-    "SELECT * FROM users WHERE username = ? AND password = ?"
-  ).get(username, password);
+  const user = db.prepare(`
+    SELECT * FROM users 
+    WHERE username = ? AND password = ?
+  `).get(username, password);
 
   if (!user) {
     return res.status(401).json({ error: "Invalid credentials" });

@@ -1,10 +1,9 @@
-// routes/applicantReview.js
 const express = require("express");
 const router = express.Router();
 const db = require("../config/applicants");
 const requireAuth = require("../middleware/requireAuth");
 
-// Get applicant dashboard informations
+// Get applicant dashboard information
 router.get("/applicant/dashboard", requireAuth, (req, res) => {
   if (req.session.user.role !== "applicant") {
     return res.status(403).json({ error: "Forbidden" });
@@ -32,7 +31,7 @@ router.get("/applicant/dashboard", requireAuth, (req, res) => {
     return res.status(404).json({ error: "Applicant not found" });
   }
 
-  res.status(200).json(applicant);
+  return res.status(200).json(applicant);
 });
 
 module.exports = router;
