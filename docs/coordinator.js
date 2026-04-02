@@ -189,7 +189,14 @@ mailBtn.addEventListener("click",() => {
 })
 
 closeBtn.addEventListener("click", closePopup);
-sendBtn.addEventListener("click", sendMail);
+sendBtn.addEventListener("click", () => {
+  const res = sendMail();
+
+  if (res) {
+    closePopup();
+    showMessage("Emails sent successfully. Note: This is a demo, so no actual emails were sent.", "success");
+  }
+});
 overlay.addEventListener("click", closePopup);
 
 function closePopup() {
@@ -198,7 +205,7 @@ function closePopup() {
 }
 
 function sendMail() {
-  window.location.href = "mailto:test@gmail.com?subject=Hello&body=This is my message";
+  return true;
 }
 
-loadApplicants(`${BASE_URL}/applicants`);
+loadApplicants();
