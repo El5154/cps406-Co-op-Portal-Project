@@ -9,7 +9,29 @@
 <body>
   <div class="container">
     <div class="header">
+      <button id="mail" class="mail">Open Mail</button>
       <h1>Coordinator Dashboard</h1>
+      <div id="overlay" class="hidden"></div>
+
+      <div id="popup" class="popup hidden">
+        <h2>Send Email</h2>
+        <form>
+
+          <h3>Sends Mail to All Late Applicants</h3>
+
+          <label for="subject">Subject:</label>
+          <input type="text" id="subject" placeholder="Enter Subject"/>
+
+          <label for="message">To:</label>
+          <textarea id="message" placeholder="Write Message"></textarea>
+
+          <div class="buttons">
+            <button type="submit" id="sendBtn">Send</button>
+            <button type="button" id="closeBtn">Close</button>
+          </div>
+
+        </form>
+      </div>
       <button id="logoutBtn">Logout</button>
     </div>
 

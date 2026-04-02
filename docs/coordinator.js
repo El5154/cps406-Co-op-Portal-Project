@@ -1,8 +1,17 @@
 const tableBody = document.getElementById("applicantTableBody");
 const message = document.getElementById("message");
 const logoutBtn = document.getElementById("logoutBtn");
+
 const showAllBtn = document.getElementById("showAllBtn");
 const showLateBtn = document.getElementById("showLateBtn");
+
+const mailBtn = document.getElementById("mail");
+const closeBtn = document.getElementById("closeBtn");
+const sendBtn = document.getElementById("sendBtn");
+
+const popup = document.getElementById("popup");
+const overlay = document.getElementById("overlay");
+
 let currentView = `${BASE_URL}/applicants`;
 
 function showMessage(text, type) {
@@ -173,5 +182,23 @@ showLateBtn.addEventListener("click", () => {
   currentView = `${BASE_URL}/applicants/missed-deadlines`;
   loadApplicants();
 });
+
+mailBtn.addEventListener("click",() => {
+  popup.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+})
+
+closeBtn.addEventListener("click", closePopup);
+sendBtn.addEventListener("click", sendMail);
+overlay.addEventListener("click", closePopup);
+
+function closePopup() {
+  popup.classList.add("hidden");
+  overlay.classList.add("hidden");
+}
+
+function sendMail() {
+  window.location.href = "mailto:test@gmail.com?subject=Hello&body=This is my message";
+}
 
 loadApplicants(`${BASE_URL}/applicants`);
