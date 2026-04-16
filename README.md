@@ -2,8 +2,8 @@
 
 A full-stack **Co-op Support Application** built for managing the student co-op workflow from registration to final report and supervisor evaluation.
 
-To Run open https://co-op-portal-cps406.onrender.com
-Then open this github page deployment page
+To Run open https://co-op-portal-cps406.onrender.com.
+Then open this github page deployment page.
 
 ## Overview
 
